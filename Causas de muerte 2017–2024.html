@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Causas de muerte 2017–2024</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;800&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<style>
+:root{--bg:#eef2f5;--pn:#fff;--ink:#12212c;--mu:#566876;--ln:#d8e0e6;--s1:#1d4e89;--s2:#d9701a;--s3:#7b4fa3;--s4:#1a8f7b;--s5:#c2455f;--band:rgba(18,33,44,.07);--font:'Public Sans',system-ui,'Segoe UI',Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a22;--pn:#15252f;--ink:#e9eff3;--mu:#9bb0bd;--ln:#263a47;--s1:#5ea2ef;--s2:#f5a04a;--s3:#b592e3;--s4:#45c4ab;--s5:#ef7f96;--band:rgba(233,239,243,.08)}}
+:root[data-theme="dark"]{--bg:#0e1a22;--pn:#15252f;--ink:#e9eff3;--mu:#9bb0bd;--ln:#263a47;--s1:#5ea2ef;--s2:#f5a04a;--s3:#b592e3;--s4:#45c4ab;--s5:#ef7f96;--band:rgba(233,239,243,.08)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--font)}
+main{max-width:1180px;margin:0 auto;padding:22px 16px 34px}
+header{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+h1{font-size:clamp(22px,3.2vw,30px);line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.01em}
+.sub{margin:0;max-width:60ch;color:var(--mu);font-size:14px}
+.yrs{display:flex;flex-wrap:wrap;gap:6px}
+.yrs button{font:600 14px var(--font);padding:7px 13px;border-radius:999px;border:1px solid var(--ln);background:var(--pn);color:var(--ink);cursor:pointer}
+.yrs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--s1);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-bottom:14px}
+.kpi{background:var(--pn);border:1px solid var(--ln);border-top:4px solid var(--c);border-radius:14px;padding:16px 18px}
+.kpi h2{font-size:14px;font-weight:600;color:var(--mu);margin:0 0 8px;line-height:1.3}
+.name{font-size:20px;font-weight:800;line-height:1.2;margin-bottom:2px}
+.big{font-size:clamp(30px,4vw,40px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.big small{font-size:15px;font-weight:600;color:var(--mu)}
+.kpi p{margin:8px 0 0;font-size:13.5px;color:var(--mu)}
+.kpi p.fine{font-size:12.5px}
+.bar{height:8px;border-radius:4px;background:var(--ln);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--s2);transition:width .4s}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:14px}
+.panel{background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:16px 16px 12px}
+.panel h2{font-size:16px;margin:0}
+.panel p{margin:2px 0 10px;color:var(--mu);font-size:13px}
+.cv{position:relative;height:350px}
+details{margin-top:16px;color:var(--mu);font-size:13px}
+summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details ul{margin:8px 0 0;padding-left:20px}
+details li{margin-bottom:4px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div>
+  <h1>Causas de muerte, 2017–2024</h1>
+  <p class="sub">Defunciones por causa según el archivo causas_de_muerte_agregado_2017_-_2024.xlsx. Elige un año para actualizar las tarjetas y resaltarlo en las gráficas.</p>
+ </div>
+ <div class="yrs" id="yrs" role="group" aria-label="Año seleccionado"></div>
+</header>
+
+<section class="kpis" aria-label="Indicadores clave">
+ <article class="kpi" style="--c:var(--s2)">
+  <h2>Peso porcentual de enfermedades metabólicas (diabetes mellitus) en el total de defunciones</h2>
+  <div class="big" id="k1"></div>
+  <div class="bar"><i id="b1"></i></div>
+  <p id="k1t"></p>
+ </article>
+ <article class="kpi" style="--c:var(--s1)">
+  <h2 id="k2h"></h2>
+  <div class="name" id="k2n"></div>
+  <div class="big" id="k2"></div>
+  <p id="k2t"></p>
+ </article>
+ <article class="kpi" style="--c:var(--s3)">
+  <h2 id="k3h"></h2>
+  <div class="big" id="k3"></div>
+  <p id="k3t"></p>
+  <p class="fine" id="k3f"></p>
+ </article>
+</section>
+
+<section class="panels">
+ <section class="panel">
+  <h2>Evolución de las cinco principales causas</h2>
+  <p>Defunciones por año. Haz clic en la leyenda para ocultar o mostrar una causa; pasa el cursor sobre un año para ver todos los valores.</p>
+  <div class="cv"><canvas id="c1" role="img" aria-label="Gráfica de líneas con la evolución de enfermedades del corazón, diabetes mellitus, tumores malignos, enfermedades del hígado y enfermedades cerebrovasculares entre 2017 y 2024"></canvas></div>
+ </section>
+ <section class="panel">
+  <h2>Diabetes mellitus y enfermedades del corazón</h2>
+  <p>Evolución histórica con el valor de cada año. La banda sombreada marca 2020–2021, años de la pandemia de COVID-19.</p>
+  <div class="cv"><canvas id="c2" role="img" aria-label="Gráfica de líneas comparando las defunciones por diabetes mellitus y por enfermedades del corazón entre 2017 y 2024"></canvas></div>
+ </section>
+</section>
+
+<details>
+ <summary>Notas sobre los datos</summary>
+ <ul>
+  <li>El archivo no trae un total general: el total de cada año es la suma de las causas que aparecen en él (las principales del año), no todas las defunciones. El peso de la diabetes se calcula sobre ese total registrado.</li>
+  <li>Se unificaron causas escritas de forma distinta entre años (enfermedades del corazón en 2019 y afecciones perinatales en 2017–2018).</li>
+  <li>En 2024 el archivo agrega subcausas (accidentes de tráfico, enfermedad alcohólica del hígado, tumores de estómago, hígado y cuello del útero, y dificultad respiratoria del recién nacido) que suman <span id="ex"></span> defunciones; se excluyeron de totales y rankings para no contarlas dos veces.</li>
+  <li>El grupo crónico-degenerativo reúne corazón, diabetes, tumores malignos, hígado, cerebrovasculares e insuficiencia renal, las seis causas presentes en todos los años. Las enfermedades pulmonares obstructivas crónicas no aparecen en 2024 y quedan fuera.</li>
+  <li>2020 y 2021 coinciden con la pandemia de COVID-19, que pudo influir en las cifras; el crecimiento acumulado incluye ese periodo.</li>
+ </ul>
+</details>
+</main>
+
+<script>
+const D={"years": [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "causes": {"Accidentes": [1163, 874, 992, 915, 979, 1031, 1039, 991], "Agresiones": [568, 513, 585, 489, 522, 462, 529, 784], "Anemias": [180, 184, 201, 335, 370, 410, 352, 374], "Bronquitis crónica y la no especificada, enfisema y asma": [244, 250, 216, 236, 202, null, null, null], "Ciertas afecciones originadas en el período perinatal": [869, 689, 703, 493, 672, 660, 611, 558], "COVID 19": [null, null, null, 2804, 3206, 390, null, null], "Desnutrición y otras deficiencias nutricionales": [360, 445, 483, 626, 442, 280, 211, 312], "Diabetes mellitus": [3819, 3891, 3904, 6016, 5838, 4658, 4531, 4769], "Enfermedad por virus de la inmunodeficiencia humana": [242, 229, 277, 242, 236, 269, 245, 253], "Enfermedades cerebrovasculares": [1176, 1189, 1192, 1296, 1286, 1183, 1110, 1108], "Enfermedades del corazón": [4197, 4662, 4842, 8562, 8949, 7617, 7171, 7107], "Enfermedades del hígado": [2083, 2189, 2240, 2537, 2627, 2362, 2342, 2400], "Enfermedades infecciosas intestinales": [358, 363, 471, 463, 479, 354, 325, 338], "Enfermedades pulmonares obstructivas crónicas": [625, 647, 668, 673, 584, 485, 500, null], "Epilepsia": [143, 139, null, null, null, 156, 154, 161], "Influenza y neumonía": [922, 998, 1110, 1842, 1955, 1140, 1306, 1237], "Insuficiencia renal": [711, 734, 800, 989, 934, 788, 816, 899], "Lesiones autoinfligidas intencionalmente": [262, 147, 200, 203, 245, 265, 243, 203], "Malformaciones congénitas, deformidades y anomalías cromosómicas": [454, 450, 472, 407, 472, 445, 464, 463], "Septicemia": [null, 175, 190, 217, 217, 202, 251, 271], "Tuberculosis pulmonar": [127, null, 148, null, null, null, 141, 135], "Tumores malignos": [3110, 3302, 3468, 3609, 3690, 3358, 3468, 3671]}, "totals": [21613, 22070, 23162, 32954, 33905, 26515, 25809, 26034], "excl": 2472},Y=D.years,C=D.causes,T=D.totals;
+const nf=n=>n.toLocaleString('es-MX'),pf=n=>n.toLocaleString('es-MX',{minimumFractionDigits:1,maximumFractionDigits:1}),sg=n=>(n<0?'−':'+')+pf(Math.abs(n));
+const MAIN=['Enfermedades del corazón','Diabetes mellitus','Tumores malignos','Enfermedades del hígado','Enfermedades cerebrovasculares'];
+const CHRON=MAIN.concat('Insuficiencia renal'),ST=['circle','rect','triangle','rectRot','star'];
+const $=id=>document.getElementById(id),css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const sum=(ks,i)=>ks.reduce((a,k)=>a+(C[k][i]||0),0);
+let yi=Y.length-1,charts=[];
+
+function render(){
+ const y=Y[yi],t=T[yi],d=C['Diabetes mellitus'];
+ document.querySelectorAll('#yrs button').forEach((b,i)=>b.setAttribute('aria-pressed',i===yi));
+ const sh=d[yi]/t*100,sh0=d[0]/T[0]*100;
+ $('k1').textContent=pf(sh)+'%';$('b1').style.width=sh+'%';
+ $('k1t').textContent=nf(d[yi])+' de '+nf(t)+' defunciones registradas en '+y+(yi?'. Frente a '+Y[0]+': '+sg(sh-sh0)+' puntos porcentuales.':'. Es el año base de la serie.');
+ const r=Object.entries(C).filter(e=>e[1][yi]!=null).sort((a,b)=>b[1][yi]-a[1][yi]);
+ $('k2h').textContent='Principal causa de muerte en '+y;$('k2n').textContent=r[0][0];
+ $('k2').innerHTML=nf(r[0][1][yi])+' <small>defunciones</small>';
+ $('k2t').textContent=pf(r[0][1][yi]/t*100)+'% del total registrado. Le sigue '+r[1][0]+' con '+nf(r[1][1][yi])+'.';
+ const g=sum(CHRON,yi),g0=sum(CHRON,0),ch=k=>(C[k][yi]/C[k][0]-1)*100;
+ $('k3h').textContent='Crecimiento acumulado de enfermedades crónico-degenerativas'+(yi?', '+Y[0]+'–'+y:'');
+ $('k3').textContent=yi?sg((g/g0-1)*100)+'%':'Año base';
+ $('k3t').textContent=yi?'De '+nf(g0)+' defunciones en '+Y[0]+' a '+nf(g)+' en '+y+'. Diabetes mellitus: '+sg(ch('Diabetes mellitus'))+'%; enfermedades del corazón: '+sg(ch(MAIN[0]))+'%.':nf(g0)+' defunciones por estas causas en '+Y[0]+'. Elige otro año para ver el cambio acumulado.';
+}
+
+const covid={id:'covid',beforeDatasetsDraw(c){
+ const x=c.ctx,a=c.chartArea,s=c.scales.x,l=s.getPixelForValue(Y.indexOf(2020)-.5),r=s.getPixelForValue(Y.indexOf(2021)+.5);
+ x.save();x.fillStyle=css('--band');x.fillRect(l,a.top,r-l,a.bottom-a.top);
+ x.fillStyle=css('--mu');x.font='600 11px '+css('--font');x.textAlign='center';x.fillText('Pandemia COVID-19',(l+r)/2,a.bottom-7);x.restore();
+}};
+const lab={id:'lab',afterDatasetsDraw(c,_,o){
+ if(!o.on)return;const x=c.ctx;x.save();x.font='700 11px '+css('--font');x.textAlign='center';
+ c.data.datasets.forEach((s,i)=>{if(!c.isDatasetVisible(i))return;x.fillStyle=s.borderColor;c.getDatasetMeta(i).data.forEach((p,j)=>x.fillText(nf(s.data[j]),p.x,p.y+(i?18:-10)))});
+ x.restore();
+}};
+
+function mk(id,names,on){
+ const ds=names.map(k=>{const n=MAIN.indexOf(k),col=css('--s'+(n+1));
+  return{label:k,data:C[k],borderColor:col,backgroundColor:col,borderWidth:k==='Diabetes mellitus'?3.5:2.5,tension:.25,pointStyle:ST[n],pointRadius:c=>c.dataIndex===yi?7:4,pointHoverRadius:8}});
+ return new Chart($(id),{type:'line',data:{labels:Y,datasets:ds},plugins:[covid,lab],options:{
+  maintainAspectRatio:false,interaction:{mode:'index',intersect:false},layout:{padding:{top:6,right:16}},
+  scales:{x:{title:{display:true,text:'Año'},grid:{display:false}},y:{beginAtZero:true,title:{display:true,text:'Defunciones registradas'},ticks:{callback:v=>nf(v)}}},
+  plugins:{lab:{on:on},legend:{position:'top',labels:{usePointStyle:true,boxWidth:9,padding:14}},tooltip:{callbacks:{label:t=>' '+t.dataset.label+': '+nf(t.parsed.y)}}}}});
+}
+
+function build(){
+ charts.forEach(c=>c.destroy());
+ Chart.defaults.color=css('--mu');Chart.defaults.borderColor=css('--ln');Chart.defaults.font.family=css('--font');Chart.defaults.font.size=12;
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)Chart.defaults.animation=false;
+ charts=[mk('c1',MAIN,false),mk('c2',MAIN.slice(0,2),true)];
+}
+
+Y.forEach((y,i)=>{const b=document.createElement('button');b.textContent=y;b.onclick=()=>{yi=i;render();charts.forEach(c=>c.update('none'))};$('yrs').append(b)});
+$('k3f').textContent='Incluye corazón, diabetes, tumores malignos, hígado, cerebrovasculares e insuficiencia renal. El archivo cubre '+Y.length+' años ('+Y[0]+'–'+Y[Y.length-1]+'), no 10.';
+$('ex').textContent=nf(D.excl);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',build);
+new MutationObserver(build).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+render();build();
+</script>
+</body>
+</html>
